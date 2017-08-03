@@ -1,0 +1,10 @@
+使用分隔符：
+#给路径
+path <- "hdfs://192.168.3.112:9100/tmp/tpcdata/20170101.txt"
+# 读取数据
+TpcData <- read.df(path, source = "text", schema=NULL)
+#转RDD
+tpc_rdd<-SparkR:::toRDD(TpcData)
+list_rd<-SparkR:::map(tpc_rdd, function(x) {unlist(base::strsplit(as.character(x),"\t",fixed = TRUE))})
+list_DF <- SparkR:::toDF(list_rd)
+head(list_DF, 1L)
